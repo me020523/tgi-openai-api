@@ -1,4 +1,4 @@
-FROM python:3.10-alpine
+FROM ghcr.io/huggingface/text-generation-inference:1.0.0
     MAINTAINER me020523 <me020523@gmail.com>
 
 ENV TGI_SERVER="http://127.0.0.1:8080"
