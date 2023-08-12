@@ -7,7 +7,7 @@ services:
     volumes:
       - ${HOME}/.cache/huggingface/hub:/data
     ports:
-      - 8080:8080
+      - 8080:80
     env_file:
       - .env
     command: ["--model-id", "${LLM_MODEL}","--json-output", "--quantize", "gptq", "--max-total-tokens", "4096", "--max-input-length", "2048", "--max-batch-prefill-tokens", "2048"]
