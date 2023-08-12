@@ -39,3 +39,11 @@ services:
             - driver: nvidia
               count: all
               capabilities: [gpu]
+
+  chatgpt-next-web:
+    container_name: chatgpt-next-web
+    image: yidadaa/chatgpt-next-web
+    ports:
+      - 3000:3000
+    env_file:
+      - .env
