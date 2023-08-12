@@ -1,0 +1,23 @@
+version: '3'
+services:
+  tgi_server:
+    image: ghcr.io/huggingface/text-generation-inference:1.0.0
+    container: tgi-server
+    restart: unless-stopped
+    volumes:
+      - ${HOME}/.cache/huggingface/hub/:/data
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    command: ['text-generation-launcher', "--model-id", "${LLM_MODEL}","--json-output", "--quantize", "gptq", "--max-total-tokens", "4096", "--max-input-length", "2048", "--max-batch-prefill-tokens", "2048"]
+  tgi_openai:
+    build: .
+    container: tgi-openai
+    env_file:
+      - .env
+    depends_on:
+      - tgi-server
