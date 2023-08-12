@@ -24,9 +24,9 @@ services:
     container_name: tgi-openai
     restart: unless-stopped
     volumes:
-      - ${HOME}/.cache/huggingface:/root/.cache/huggingface
+      - ${HOME}/.cache/torch/sentence_transformers:/st_cache
     ports:
-      - 8000:8000
+      - 8000:80
     env_file:
       - .env
     depends_on:
