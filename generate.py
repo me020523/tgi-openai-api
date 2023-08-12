@@ -55,6 +55,23 @@ class StableBelugaPromptConverter(PromptConverter):
         return promot
 
 
+class VicunaPromptConventer(PromptConverter):
+    def convert(self, messages: List[Dict[str, str]]) -> str:
+        prompt = ""
+
+        for msg in messages:
+            role, content = msg["role"], msg["content"]
+            if role == Role.USER:
+                prompt += f"USER: {content}\n"
+            elif role == Role.SYSTEM:
+                prompt += f"{content}\n\n"
+            elif role == Role.ASSISTANT:
+                prompt += f"ASSISTANT:{content}\n"
+
+        prompt += "ASSISTANT:"
+        return prompt
+
+
 class ModelServer:
     def __init__(
         self,
@@ -70,6 +87,7 @@ class ModelServer:
         self.prompt_converter = {
             "aplaca": AlpacaPromptConverter(),
             "stable-beluga": StableBelugaPromptConverter(),
+            "vicuna": VicunaPromptConventer(),
         }
 
     def setup_completion_prompt(self, prompt: str) -> List[Dict[str, str]]:
