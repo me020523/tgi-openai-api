@@ -16,6 +16,14 @@ services:
       timeout: 10s
       retries: 3
     command: ['text-generation-launcher', "--model-id", "${LLM_MODEL}","--json-output", "--quantize", "gptq", "--max-total-tokens", "4096", "--max-input-length", "2048", "--max-batch-prefill-tokens", "2048"]
+    shm_size: "1G"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
   tgi_openai:
     build: .
     container_name: tgi-openai
@@ -28,3 +36,11 @@ services:
       - .env
     depends_on:
       - tgi_server
+    shm_size: "1G"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
