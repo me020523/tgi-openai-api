@@ -85,7 +85,7 @@ class ModelServer:
         self.tgi_client = Client(self.tgi_server)
         self.embed_client = SentenceTransformer(embedding_name)
         self.prompt_converter = {
-            "aplaca": AlpacaPromptConverter(),
+            "alpaca": AlpacaPromptConverter(),
             "stable-beluga": StableBelugaPromptConverter(),
             "vicuna": VicunaPromptConventer(),
         }
