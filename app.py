@@ -32,6 +32,9 @@ if __name__ == "__main__":
         type=str,
         default="BAAI/bge-large-en",
     )
+    parser.add_argument(
+        "--embedding_device", help="embedding device", type=str, default="cpu"
+    )
     args = parser.parse_args()
 
     from router import main

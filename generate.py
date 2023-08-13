@@ -78,12 +78,14 @@ class ModelServer:
         tgi_server: str,
         model_name: str = "alpaca",
         embedding_name: str = "BAAI/bge-large-en",
+        embedding_device: str = "cpu",
     ):
         self.tgi_server = tgi_server
         self.model_name = model_name
         self.embedding_name = embedding_name
+        self.embed_device = embedding_device
         self.tgi_client = Client(self.tgi_server)
-        self.embed_client = SentenceTransformer(embedding_name)
+        self.embed_client = SentenceTransformer(embedding_name, device=embedding_device)
         self.prompt_converter = {
             "alpaca": AlpacaPromptConverter(),
             "stable-beluga": StableBelugaPromptConverter(),
