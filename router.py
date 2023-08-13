@@ -389,10 +389,7 @@ async def create_embeddings(request: EmbeddingsRequest, model_name: str = None):
             "input": batch,
         }
 
-        if not args.embedding_name:
-            embedding = model_server.get_embeddings(payload)
-        else:
-            embedding = model_server.get_other_embeddings(embed_client, payload)
+        embedding = model_server.get_embeddings(payload)
 
         data += [
             {
