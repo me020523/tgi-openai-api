@@ -59,7 +59,6 @@ class AlpacaInstructOnlyPromptConverter(PromptConverter):
             if role == Role.ASSISTANT:
                 prompt += f"### Response:\n{content}\n"
         prompt += "### Response:\n"
-        print(prompt)
         return prompt
 
 
@@ -116,7 +115,7 @@ class ModelServer:
             "alpaca": AlpacaPromptConverter(),
             "stable-beluga": StableBelugaPromptConverter(),
             "vicuna": VicunaPromptConventer(),
-            "platypus2": AlpacaInstructOnlyPromptConverter(),
+            "platypus2": AlpacaPromptConverter(),
         }
 
     def setup_completion_prompt(self, prompt: str) -> List[Dict[str, str]]:
