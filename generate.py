@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
-import time
 from torch.cuda import OutOfMemoryError
 from constants import ErrorCode
 import torch
 from sentence_transformers import SentenceTransformer
-from typing import Any, AsyncGenerator, Dict, Generator, Iterator, List
+from typing import (
+    Any,
+    Dict,
+    Iterator,
+    List,
+    Optional,
+)
 
 from text_generation.client import Response, StreamResponse
 from text_generation.types import FinishReason
@@ -34,6 +39,27 @@ class AlpacaPromptConverter(PromptConverter):
             if role == Role.ASSISTANT:
                 prompt += f"\n\n### Response:\n{content}"
         prompt += "\n\n### Response:\n"
+        return prompt
+
+
+class AlpacaInstructOnlyPromptConverter(PromptConverter):
+    def convert(self, messages: List[Dict[str, str]]) -> str:
+        prompt: str = ""
+        system: Optional[str] = None
+        for msg in messages:
+            role, content = msg["role"], msg["content"]
+            if role == Role.USER:
+                if system is None:
+                    prompt += f"### Instruction:\n\n{content}\n\n"
+                else:
+                    prompt += f"### Instruction:\n\n{system}\n{content}\n\n"
+                    system = None
+            if role == Role.SYSTEM:
+                system = content
+            if role == Role.ASSISTANT:
+                prompt += f"### Response:\n{content}\n"
+        prompt += "### Response:\n"
+        print(prompt)
         return prompt
 
 
@@ -90,6 +116,7 @@ class ModelServer:
             "alpaca": AlpacaPromptConverter(),
             "stable-beluga": StableBelugaPromptConverter(),
             "vicuna": VicunaPromptConventer(),
+            "platypus2": AlpacaInstructOnlyPromptConverter(),
         }
 
     def setup_completion_prompt(self, prompt: str) -> List[Dict[str, str]]:
